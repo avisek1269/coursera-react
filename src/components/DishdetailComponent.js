@@ -26,7 +26,9 @@ import CommentForm from './CommentForm'
                     </div>
                     <div  className="col-12 col-md-5 m-1">
                         <h4>Comments</h4>
-                        <RenderComments comments={props.comments} />
+                        <RenderComments comments={props.comments}
+                            addComment={props.addComment}
+                            dishId={props.dish.id}/>
                     </div>
                 </div>
             </div>
@@ -49,7 +51,7 @@ import CommentForm from './CommentForm'
         </Card>)
     }
 
-    function RenderComments({comments}) {
+    function RenderComments({comments, addComment, dishId}) {
         if(comments && comments.length > 0) { 
 
             return (
@@ -67,7 +69,7 @@ import CommentForm from './CommentForm'
                 )
             }) 
             }
-            <li><CommentForm/></li>
+            <li><CommentForm dishId={dishId} addComment={addComment}/></li>
             </ul>
             )
         }
