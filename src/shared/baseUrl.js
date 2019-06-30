@@ -1,0 +1,1 @@
+export const baseUrl = 'https://con-fusion-app.herokuapp.com/';
