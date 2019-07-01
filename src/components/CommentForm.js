@@ -19,9 +19,8 @@ class CommentForm extends Component {
     }
 
     handleSubmit(values) {
-        debugger;
         this.toggleModal();
-        this.props.addComment(this.props.dishId, values.rating, values.yourname, values.comment)
+        this.props.postComment(this.props.dishId, values.rating, values.yourname, values.comment)
         }
 
     toggleModal() {

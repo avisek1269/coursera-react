@@ -1,13 +1,13 @@
 import React from 'react';
 import { Card, CardImg, CardText, CardBody,
     CardTitle, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import { FadeTransform, Fade, Stagger } from 'react-animation-components';    
 import { Link } from 'react-router-dom';
 import CommentForm from './CommentForm'
 import { Loading } from './LoadingComponent';
 import { baseUrl } from '../shared/baseUrl';
 
     const  DishDetail = (props) => {
-        debugger;
 
         if (props.isLoading) {
             return(
@@ -48,7 +48,7 @@ import { baseUrl } from '../shared/baseUrl';
                     <div  className="col-12 col-md-5 m-1">
                         <h4>Comments</h4>
                         <RenderComments comments={props.comments}
-                            addComment={props.addComment}
+                            postComment={props.postComment}
                             dishId={props.dish.id}/>
                     </div>
                 </div>
@@ -62,36 +62,46 @@ import { baseUrl } from '../shared/baseUrl';
     }
 
     function RenderDish({dish})  {
-        return  (
-        <Card>
-            <CardImg top src={baseUrl + dish.image} alt={dish.name} />
-            <CardBody>
-                <CardTitle>{dish.name}</CardTitle>
-                <CardText>{dish.description}</CardText>
-            </CardBody>
-        </Card>)
+        return (
+            <FadeTransform
+            in
+            transformProps={{
+                exitTransform: 'scale(0.5) translateY(-50%)'
+            }}>    
+                <Card>
+                    <CardImg top src={baseUrl + dish.image} alt={dish.name} />
+                    <CardBody>
+                        <CardTitle>{dish.name}</CardTitle>
+                        <CardText>{dish.description}</CardText>
+                    </CardBody>
+                </Card>
+            </FadeTransform>)
     }
 
-    function RenderComments({comments, addComment, dishId}) {
+    function RenderComments({comments, postComment, dishId}) {
         if(comments && comments.length > 0) { 
 
             return (
-                <ul className="list-unstyled mb-4"> {
-                comments.map( comment => {
-                const date = new Date(comment.date);
-                return (
-                        <li key={comment.id}>
-                            <p className="mb-3">{comment.comment}</p>
-                            <p className="mb-3">-- {comment.author}, {date.toLocaleDateString('en-US', {
-                                day: 'numeric', month: 'short', year: 'numeric'
-                                })}
-                            </p>
-                        </li> 
-                )
-            }) 
-            }
-            <li><CommentForm dishId={dishId} addComment={addComment}/></li>
-            </ul>
+                <ul className="list-unstyled mb-4">
+                    <Stagger in>
+                    { comments.map( comment => {
+                        const date = new Date(comment.date);
+                        return (
+                            <Fade in key={comment.id}>
+                                <li key={comment.id}>
+                                    <p className="mb-3">{comment.comment}</p>
+                                    <p className="mb-3">-- {comment.author}, {date.toLocaleDateString('en-US', {
+                                        day: 'numeric', month: 'short', year: 'numeric'
+                                        })}
+                                    </p>
+                                </li>
+                            </Fade> 
+                                )
+                            }) 
+                    }
+                    </Stagger>
+                    <li><CommentForm dishId={dishId} postComment={postComment}/></li>
+                </ul>
             )
         }
         else {
